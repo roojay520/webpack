@@ -1,0 +1,8 @@
+@import './colors.scss';
+#app {
+    display: flex;
+    box-sizing: border-box;
+    font-family: Microsoft YaHei;
+    color: $red-light;
+    font-size: 20px;
+}

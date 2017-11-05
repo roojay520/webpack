@@ -4,15 +4,16 @@
   "description": "Webpack setting.",
   "scripts": {
     "server": "webpack-dev-server --open",
-    "build": "webpack"
+    "dev": "set type=dev&webpack&webpack-dev-server --open",
+    "build": "set type=build&webpack"
   },
   "keywords": [
     "webpack"
   ],
   "author": "roojay <roojay520@gmail.com>",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/roojay520/webpack.git"
+    "type": "git",
+    "url": "https://github.com/roojay520/webpack.git"
   },
   "license": "MIT",
   "devDependencies": {
@@ -24,6 +25,7 @@
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
+    "glob": "^7.1.2",
     "html-webpack-plugin": "^2.30.1",
     "html-withimg-loader": "^0.1.16",
     "node-sass": "^4.5.3",

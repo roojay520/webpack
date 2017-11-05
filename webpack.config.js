@@ -14,6 +14,8 @@ const HtmlPlugin = require('html-webpack-plugin');
 const PurifyCss = require('purifycss-webpack');
 // 无需编译打包的静态资源转移
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+// 解决 css 中图片路径问题
+const website = require('./config/config.js');
 
 module.exports = {
     // 开发调试设置
@@ -21,7 +23,7 @@ module.exports = {
     // 入口文件
     entry: {
         // js 入口文件
-        app: `${__dirname}/main.js`,
+        app: `${__dirname}/src/main.js`,
         vue: 'vue',
     },
     // 出口文件
@@ -29,6 +31,7 @@ module.exports = {
         // 打包文件路径
         path: `${__dirname}/dist/`,
         filename: 'js/[name].[hash:6].js',
+        publicPath: website.publicPath,
     },
     // 模块
     module: {
@@ -46,8 +49,6 @@ module.exports = {
                         // options: {
                         // css 压缩与 purifycss-webpack 不能共存
                         // minimize: true,
-                        // loader 权重?
-                        // importLoaders: 1,
                         // 类名,属性名全部会转换
                         // modules: true,
                         // },
@@ -63,9 +64,9 @@ module.exports = {
                     ],
                 }),
             },
-            // 图片处理
+            // 图片字体处理
             {
-                test: /\.(jpg|png|gif)$/,
+                test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
                 use: {
                     loader: 'url-loader',
                     options: {
@@ -98,6 +99,9 @@ module.exports = {
         ],
     },
     // 插件
+    /* plugin 和 loader 的区别是, loader 是在 import 时根据不同的文件名, 匹配不同的loader对这个文件做处理,
+       而 plugin 关注的不是文件的格式, 而是在编译的各个阶段, 会触发不同的事件, 让你可以干预每个编译阶段.
+    */
     plugins: [
         // 打包生成 html
         new HtmlPlugin({
@@ -107,7 +111,7 @@ module.exports = {
                 removeAttributeQuotes: true,
             },
             // 避免缓存JS
-            // hash: true,
+            hash: true,
             // html 打包模板文件
             template: './src/index.html',
         }),
@@ -138,7 +142,9 @@ module.exports = {
             uglifyOptions: {
                 ie8: false,
                 output: {
+                    // 去掉注释
                     comments: false,
+                    // 压缩掉空格
                     beautify: false,
                 },
                 mangle: {
@@ -163,11 +169,12 @@ module.exports = {
         aggregeateTimeout: 500,
         ignore: /node_modules/,
     },
-    // 开发服务
+    // 配置开发时用的服务器
     devServer: {
         contentBase: path.resolve(__dirname, 'dist'),
         host: '127.0.0.1',
         compress: true,
         port: 4399,
+        historyApiFallback: true,
     },
 };
